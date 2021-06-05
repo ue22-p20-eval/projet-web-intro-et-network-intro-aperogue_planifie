@@ -21,3 +21,11 @@ body{
     opacity: 0.75;
     color: cyan;
 }
+
+#console{
+    display : inline-grid;
+    line-height: 15px;
+    column-width: 15px;
+    grid-gap: 0px;
+    padding : 3px
+}

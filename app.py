@@ -22,7 +22,6 @@ def on_move_msg(json, methods=["GET", "POST"]):
     if ret:
         socketio.emit("response", data)
 
-
 if __name__=="__main__":
     socketio.run(app, port=5001)
 
