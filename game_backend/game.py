@@ -1,6 +1,7 @@
 from .map_generator import Generator
 from .player import Player, Monster
 from .treasure import Treasure
+import numpy as np
 
 class Game:
     def __init__(self, width=64, height=32):
@@ -11,12 +12,18 @@ class Game:
 
         self._player = Player()
         self._player.initPos( self._map )
-
-        self._monster = Monster()
-        self._monster.initPos( self._map )
-
-        self._treasure = Treasure()
-        self._treasure.initPos( self._map )
+        self.M_list = [Monster() for _ in range(np.random.randint(2,5))]
+        self.T_list = [Treasure(status='revealed') for _ in range(np.random.randint(3,6)) ]
+        
+        for monst in self.M_list :
+            monst.initPos( self._map )
+        for t1 in self.T_list: # Cadeaux apparents
+            t1.initPos( self._map )
+        
+        
+        self.T_list[0].effect = 'Heal'#  Le premier cadeau donne toujours de la vie, sinon atk
+        self.T_list[-1].status = 'Hide'
+        self.T_list[-2].status = 'Hide' 
 
     def getMap(self):
         return self._map
@@ -24,14 +31,30 @@ class Game:
     def move(self, dx, dy):
         temp1,temp2 = self._player.move(dx, dy, self._map)
         if len(temp1) >0 and temp1[0] == 'Fight required' :
-            print("la")
-            Game.attack(self,self._player,self._monster)
-            if self._monster.alive == False :
-                print("la bis")
+            ## On recherche sur quel monstre on est tombé :
+            i=0
+            while not (self.M_list[i]._x == self._player._x + dx and self.M_list[i]._y == self._player._y + dy):
+                i=i+1
+
+            Game.attack(self,self._player,self.M_list[i])
+            if self.M_list[i].alive == False :
                 self._map[self._player._y + dy][self._player._x + dx] = '.'
                 return(self._player.move(dx, dy, self._map))
             else : 
                 return([],True)
+
+        elif len(temp1) >0 and temp1[0] == 'Treasure found' :
+            ## On recherche sur quel trésor on est tombé :
+            i=0
+            while not (self.T_list[i]._x == self._player._x + dx and self.T_list[i]._y == self._player._y + dy):
+                i=i+1
+            if self.T_list[i].effect == 'Heal':
+                self._player.lp += int(self.T_list[i].nb)
+            else :
+                self._player.atk += int(self.T_list[i].nb)
+            self._map[self._player._y + dy][self._player._x + dx] = '.'
+            return(self._player.move(dx, dy, self._map))
+
         else : 
             return (temp1,temp2)
         

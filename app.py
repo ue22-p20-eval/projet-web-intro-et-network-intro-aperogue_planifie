@@ -19,8 +19,10 @@ def on_move_msg(json, methods=["GET", "POST"]):
     dy = json["dy"]
 
     data, ret = game.move(dx,dy)
-    if ret:
-        socketio.emit("response", data)
+
+    DATA = [data,game._player.lp, game._player.atk,game._player.alive]
+    
+    socketio.emit("response", DATA)
 
 if __name__=="__main__":
-    socketio.run(app, port=5001)
+    socketio.run(app, port=5001, debug=True)

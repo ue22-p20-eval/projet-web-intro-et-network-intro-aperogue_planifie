@@ -6,7 +6,18 @@
     </head>
     <body>
         <div> <b> Rogue Flask </b></div>
-        
+        <table>
+            <tbody>
+                <tr>
+                    <td>Attaque : = </td>
+                    <td id = "atk">{{ golds }}</td> 
+                </tr>
+                <tr>
+                    <td>LP = </td>
+                    <td id = "lp">{{ HP }}</td> 
+                </tr>
+            </tbody>
+        </table>
         <div class="flexbox">
             <div class="thekeypad">
                 <div class="key"></div>
@@ -28,21 +39,10 @@
                     {% endfor %}
                 </div>
                 {% endfor %}
-            </div class="flexbox">
-                Life Points : 
-
-                Inventory :
-            </div>
-
-            </div class="flexbox">
-                
-            </div>
             
-            <audio controls loop='true'>
+            <audio controls >
                 <source src={{ url_for("static", filename="musique.mp3") }} type="audio/mpeg">
-                <p>Votre navigateur ne prend pas en charge l'audio HTML. Voici un
-                   un <a href="myAudio.mp4">lien vers le fichier audio</a> pour le
-                   télécharger.</p>
+                <p>Votre navigateur ne prend pas en charge l'audio HTML.</p>
               </audio>
             
         </div>

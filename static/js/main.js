@@ -5,15 +5,19 @@ window.addEventListener("DOMContentLoaded", (event) => {
         switch(e.keyCode){
             case 37:
                 socket.emit("move", {dx:-1, dy:0});
+                
                 break;
             case 38:
                 socket.emit("move", {dx:0, dy:-1});
+                
                 break;
             case 39:
                 socket.emit("move", {dx:1, dy:0});
+                
                 break;
             case 40:
                 socket.emit("move", {dx:0, dy:1});
+                
                 break;
         }
 
@@ -24,33 +28,51 @@ window.addEventListener("DOMContentLoaded", (event) => {
     btn_n.onclick = function(e) {
         console.log("Clicked on button north");
         socket.emit("move", {dx:0, dy:-1});
+        
     };
 
     var btn_s = document.getElementById("go_s");
     btn_s.onclick = function(e) {
         console.log("Clicked on button south");
         socket.emit("move", {dx:0, dy:1});
+        
     };
 
     var btn_w = document.getElementById("go_w");
     btn_w.onclick = function(e) {
         console.log("Clicked on button w");
         socket.emit("move", {dx:-1, dy:0});
+        
     };
 
     var btn_e = document.getElementById("go_e");
     btn_e.onclick = function(e) {
         console.log("Clicked on button e");
         socket.emit("move", {dx:1, dy:0});
+        
     };
 
 
-    socket.on("response", function(data){
-        console.log(data);
+    socket.on("response", function(DATA){
+        console.log(DATA);
+        data = DATA[0]
         for( var i=0; i<2; i++){
             var cell_id = "cell " + data[i].i + "-" + data[i].j;
             var span_to_modif = document.getElementById(cell_id);
             span_to_modif.textContent = data[i].content;
+        }
+        /* New : */
+        var LP = document.getElementById("lp")
+        LP.textContent = DATA[1]
+        var atk = document.getElementById("atk")
+        atk.textContent = DATA[2]
+
+        if( DATA[3] == false )
+        {
+            var div_to_hide = document.getElementById("flexbox")
+            div_to_hide.style.display = 'none';
+            var game_over = document.getElementById("game_over");
+            game_over.style.display = 'flex';
         }
     });
 

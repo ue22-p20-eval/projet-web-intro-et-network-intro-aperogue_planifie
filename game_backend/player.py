@@ -39,9 +39,11 @@ class Player:
             self._x = new_x
             self._y = new_y
         elif map[new_y][new_x ] == "M":
-            print("player -> M ")
             ret = True
             data = ['Fight required']
+        elif map[new_y][new_x] == "T":
+            ret = True
+            data = ['Treasure found']
         else:
             ret = False
             data = []
@@ -72,8 +74,8 @@ class Monster:
                     break
             y_init += 1
 
-            if y_init > n_row :
-                y_init = 1
+            if y_init > n_row-1 :
+                y_init = 0
 
         self._x = x_init
         self._y = y_init
