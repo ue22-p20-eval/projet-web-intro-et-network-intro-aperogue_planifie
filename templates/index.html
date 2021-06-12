@@ -4,17 +4,17 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
         <script type="text/javascript" src={{ url_for("static", filename="js/main.js") }}></script>
     </head>
-    <body>
+    <body onload="startMap()">
         <div> <b> Rogue Flask </b></div>
         <table>
             <tbody>
                 <tr>
                     <td>Attaque : = </td>
-                    <td id = "atk">{{ golds }}</td> 
+                    <td id = "atk">{{ atk }}</td> 
                 </tr>
                 <tr>
                     <td>LP = </td>
-                    <td id = "lp">{{ HP }}</td> 
+                    <td id = "lp">{{ lp }}</td> 
                 </tr>
             </tbody>
         </table>
@@ -31,14 +31,6 @@
                 <div class="key"></div>
             </div>
 
-            <div id="console" style="font-family: monospace;">
-                {% for i in range(n_row) %}
-                <div style="height:18px">
-                    {% for j in range(n_col) %}
-                    <span id="{{ 'cell {}-{}'.format(i,j) }}"> {{ mapdata[i][j] }} </span>
-                    {% endfor %}
-                </div>
-                {% endfor %}
             
             <audio controls >
                 <source src={{ url_for("static", filename="musique.mp3") }} type="audio/mpeg">
@@ -47,5 +39,69 @@
             
         </div>
         
+
+    <script>
+        var res = 16;
+        var mapdata = JSON.parse('{{ mapdata | tojson }}');
+            
+        var n_row = '{{ n_row | tojson}}';
+        
+        var map_height = parseInt(n_row);
+        
+        var n_col = '{{ n_col | tojson }}';
+        
+        var map_width = parseInt(n_col);
+        
+        var myGameArea = { /* Initializing canvas */
+            canvas : document.createElement("canvas"),
+            start : function() {
+                this.canvas.style.left = "100px";
+                this.canvas.style.top = "200px";
+                this.canvas.style.position = "absolute"
+                this.canvas.width = res*map_width;
+                this.canvas.height = res*map_height;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+            }
+        }
+
+        function startMap(){ /*  */
+            myGameArea.start();
+            for(var i = 0; i < map_height; i++){
+                for(var j = 0; j < map_width; j++){
+                    var element = mapdata[i][j]
+                    myGameArea.context.drawImage(Table_eq.get(element),j*res,i*res);
+                }
+            }
+        }
+        
+        var floor = new Image();
+        floor.src = '../static/pic/floor.png'
+
+        var floor2 = new Image();
+        floor2.src = '../static/pic/floor_used.png'
+        
+        var wall = new Image();
+        wall.src = '../static/pic/wall.png'
+        
+        var treasure = new Image();
+        treasure.src = '../static/pic/treasure.png'
+        
+        var monster = new Image();
+        monster.src = '../static/pic/monster.png'
+
+        var player = new Image();
+        player.src = '../static/pic/player.png'
+        
+        var Table_eq = new Map();
+        Table_eq.set(".",floor);
+        Table_eq.set("#",wall);
+        Table_eq.set("T",treasure);
+        Table_eq.set("@",player);
+        Table_eq.set("x",floor2);
+        Table_eq.set("M",monster);
+
+    </script>
+            
     </body>
 </html>

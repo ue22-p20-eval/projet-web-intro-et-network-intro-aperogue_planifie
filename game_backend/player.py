@@ -1,6 +1,6 @@
 import numpy as np
 class Player:
-    def __init__(self, lp=100, atk=10,symbol="@"):
+    def __init__(self, lp=100, atk=5,symbol="@"):
         self._symbol = symbol
         self.lp = lp #Life point
         self.atk = atk

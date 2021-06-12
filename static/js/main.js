@@ -51,23 +51,33 @@ window.addEventListener("DOMContentLoaded", (event) => {
         socket.emit("move", {dx:1, dy:0});
         
     };
-
+    
+    function component(element, x, y) { /* Draw an image with x and y the coordinates of the NW point */
+        ctx = myGameArea.context;
+        
+        ctx.drawImage(element,x, y);
+    }
 
     socket.on("response", function(DATA){
         console.log(DATA);
         data = DATA[0]
-        for( var i=0; i<2; i++){
-            var cell_id = "cell " + data[i].i + "-" + data[i].j;
-            var span_to_modif = document.getElementById(cell_id);
-            span_to_modif.textContent = data[i].content;
+
+        for( var p=0; p<2; p++){
+            var pos_x = data[p].j;
+            var pos_y = data[p].i;
+            var element = data[p].content; 
+            component(Table_eq.get(element),pos_x*res,pos_y*res);
+
+            
         }
+        
         /* New : */
         var LP = document.getElementById("lp")
         LP.textContent = DATA[1]
         var atk = document.getElementById("atk")
         atk.textContent = DATA[2]
 
-        if( DATA[3] == false )
+        if( DATA[3] == false ) /* a modif*/
         {
             var div_to_hide = document.getElementById("flexbox")
             div_to_hide.style.display = 'none';
