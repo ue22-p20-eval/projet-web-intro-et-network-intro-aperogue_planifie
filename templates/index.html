@@ -4,32 +4,163 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
         <script type="text/javascript" src={{ url_for("static", filename="js/main.js") }}></script>
     </head>
-    <body>
+    <body onload="startMap()">
         <div> <b> Rogue Flask </b></div>
+        <table style="float:left">
+            <thead>
+                <tr>
+                    <th id='tab1' colspan="2">   Player 1</th>
+                    
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Attack : </td>
+                    <td id = "atk">{{ atk }}</td>
+                    
+                </tr>
+                <tr>
+                    <td>Life Points : </td>
+                    <td id = "lp">{{ lp }}</td> 
+                </tr>
+                <tr>
+                    <td>
+                    <div id = 'fleche' class="flexbox"> 
+                        <div class="thekeypad">
+                            <div class="key"></div>
+                            <div class="key"><input id="go_n" class="keypad_btn" type="button" value="&#9650"> </div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_w" class="keypad_btn" type="button" value="&#9664"></div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_e" class="keypad_btn" type="button" value="&#9654"></div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_s" class="keypad_btn" type="button" value="&#9660"></div>
+                            <div class="key"></div>
+                        </div>
+                        </td>
+                        
+                </tr>
+            </tbody>
+        </table>
 
-        <div class="flexbox">
-            <div class="thekeypad">
-                <div class="key"></div>
-                <div class="key"><input id="go_n" class="keypad_btn" type="button" value="&#9650"> </div>
-                <div class="key"></div>
-                <div class="key"><input id="go_w" class="keypad_btn" type="button" value="&#9664"></div>
-                <div class="key"></div>
-                <div class="key"><input id="go_e" class="keypad_btn" type="button" value="&#9654"></div>
-                <div class="key"></div>
-                <div class="key"><input id="go_s" class="keypad_btn" type="button" value="&#9660"></div>
-                <div class="key"></div>
-            </div>
+        <table style="float:right">
+            <thead>
+                <th id='tab2' colspan="2">   Player 2 : <br> Not spawned yet</th>
+                </thead>
+            <tr>
+                <td>Attack :</td>
+                <td id ='atk2'>{{ atk2 }}</td> 
 
-            <div id="console" style="font-family: monospace;">
-                {% for i in range(n_row) %}
-                <div style="height:18px">
-                    {% for j in range(n_col) %}
-                    <span id="{{ 'cell {}-{}'.format(i,j) }}"> {{ mapdata[i][j] }} </span>
-                    {% endfor %}
-                </div>
-                {% endfor %}
-            </div>
-        </div>
+            </tr>
+            <tr><td>Life points :</td>
+                <td id ='lp2'>{{ lp2 }}</td>
+                 </tr> 
+            <tr>
+                <td>
+                    <div id = 'fleche' class="flexbox"> 
+                        <div class="thekeypad">
+                            <div class="key"></div>
+                            <div class="key"><input id="go_nb" class="keypad_btn" type="button" value="&#9650"> </div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_wb" class="keypad_btn" type="button" value="&#9664"></div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_eb" class="keypad_btn" type="button" value="&#9654"></div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_sb" class="keypad_btn" type="button" value="&#9660"></div>
+                            <div class="key"></div>
+                        </div>    
+                    </td>
+            </tr>
+        </table>
 
+        <table style="float:center;">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id='New Player'>
+                            <input class="newplayer" type="button" value="New Player"> </div>
+                    </td>
+                    <td>
+                        <audio controls loop='true' >
+                            <source src={{ url_for("static", filename="musique.mp3") }} type="audio/mpeg">
+                            <p>Votre navigateur ne prend pas en charge l'audio HTML.</p>
+                          </audio>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div id="game_over">            
+    </div>
+
+    <script>
+        var res = 16;
+        var mapdata = JSON.parse('{{ mapdata | tojson }}');
+            
+        var n_row = '{{ n_row | tojson}}';
+        
+        var map_height = parseInt(n_row);
+        
+        var n_col = '{{ n_col | tojson }}';
+        
+        var map_width = parseInt(n_col);
+        
+        var myGameArea = { /* Fenetre de jeu */
+            canvas : document.createElement("canvas"),
+            start : function() {
+                this.canvas.style.left = "150px";
+                this.canvas.style.top = "200px";
+                this.canvas.style.position = "absolute"
+                this.canvas.width = res*map_width;
+                this.canvas.height = res*map_height;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+            }
+        }
+
+        function startMap(){
+            myGameArea.start();
+            for(var i = 0; i < map_height; i++){
+                for(var j = 0; j < map_width; j++){
+                    var element = mapdata[i][j]
+                    myGameArea.context.drawImage(Table_eq.get(element),j*res,i*res);
+                }
+            }
+        }
+        
+        var floor = new Image();
+        floor.src = '../static/pic/floor.png'
+
+        var floor2 = new Image();
+        floor2.src = '../static/pic/floor_used.png'
+        
+        var wall = new Image();
+        wall.src = '../static/pic/wall.png'
+        
+        var treasure = new Image();
+        treasure.src = '../static/pic/treasure.png'
+        
+        var monster = new Image();
+        monster.src = '../static/pic/monster.png'
+
+        var player = new Image();
+        player.src = '../static/pic/player.png'
+
+        var player2 = new Image();
+        player2.src = '../static/pic/player.png'
+        
+        var Table_eq = new Map();
+        Table_eq.set(".",floor);
+        Table_eq.set("#",wall);
+        Table_eq.set("T",treasure);
+        Table_eq.set("@",player);
+        Table_eq.set("x",floor2);
+        Table_eq.set("M",monster);
+        Table_eq.set("G",player2);
+
+    </script>
+            
     </body>
 </html>

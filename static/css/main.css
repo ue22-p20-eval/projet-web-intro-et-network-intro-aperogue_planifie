@@ -2,6 +2,17 @@ body{
     background-color: slategray;
 }
 
+audio { 
+    width: 300px; 
+    height: 50px;
+    display: block; 
+}
+
+table {
+    border: 1px solid black;
+    border-collapse: separate;
+  }
+
 .flexbox{
     display: flex;
     flex-direction: row;
@@ -20,4 +31,18 @@ body{
     background-color: black;
     opacity: 0.75;
     color: cyan;
+}
+
+.newplayer{
+    background-color: rgb(173, 24, 24);
+    opacity: 0.75;
+    color: rgb(1, 10, 10);
+}
+
+#console{
+    display : inline-grid;
+    line-height: 15px;
+    column-width: 15px;
+    grid-gap: 0px;
+    padding : 3px
 }
