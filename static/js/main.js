@@ -111,7 +111,19 @@ window.addEventListener("DOMContentLoaded", (event) => {
     socket.on("response", function(DATA){
         console.log(DATA);
         data = DATA[0]
-        if (data[0].i == -100) {
+
+        if (data[0] == undefined) {
+            console.log("Mur ou personne")
+            var LP = document.getElementById("lp")
+            LP.textContent = DATA[8]
+            var atk = document.getElementById("atk")
+            atk.textContent = DATA[7]
+            var LP = document.getElementById("lp2")
+            LP.textContent = DATA[6]
+            var atk = document.getElementById("atk2")
+            atk.textContent = DATA[5]
+        }
+        else if (data[0].i == -100) {
             var NP = document.getElementById("New Player")
             NP.style.display = "none";
             var pos_x = DATA[1][0].x;
@@ -123,24 +135,21 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
         }
         else {
-            if (DATA[4] ==0){
-                var LP = document.getElementById("lp")
-                LP.textContent = DATA[1]
-                var atk = document.getElementById("atk")
-                atk.textContent = DATA[2]
-            } else {
-                var LP = document.getElementById("lp2")
-                LP.textContent = DATA[1]
-                var atk = document.getElementById("atk2")
-                atk.textContent = DATA[2]
-            }
+            
+            var LP = document.getElementById("lp")
+            LP.textContent = DATA[8]
+            var atk = document.getElementById("atk")
+            atk.textContent = DATA[7]
+            var LP = document.getElementById("lp2")
+            LP.textContent = DATA[6]
+            var atk = document.getElementById("atk2")
+            atk.textContent = DATA[5]
 
             
     
             for( var p=0; p<2; p++){
                 var pos_x = data[p].j;
                 var pos_y = data[p].i;
-                console.log(typeof(pos_x))
                 var element = data[p].content; 
                 myGameArea.context.drawImage(Table_eq.get(element),pos_x*res,pos_y*res);
     
@@ -162,7 +171,13 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
             var game_over = document.getElementById("game_over");
             game_over.style.display = "flex";
-            game_over.textContent = "Game Over for player" + DATA[4]+1
+            if (DATA[4] ==0) {
+                game_over.textContent = "Game Over for player 1"
+            } else {
+                game_over.textContent = "Game over for player 2"
+            }
+
+            
             
         }
     });

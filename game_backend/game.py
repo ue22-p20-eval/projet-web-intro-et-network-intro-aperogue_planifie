@@ -48,6 +48,13 @@ class Game:
                 return(player.move(dx, dy, self._map))
             else : 
                 return([],True)
+        elif len(temp1)>0 and temp1[0] == 'Fight P1P2' :
+            Game.attack(self,player,self.player2)
+            return([],True)
+
+        elif len(temp1)>0 and temp1[0] == 'Fight P2P1' :
+            Game.attack(self,player,self._player)
+            return([],True)
 
         elif len(temp1) >0 and temp1[0] == 'Treasure found' :
             ## On recherche sur quel trésor on est tombé :
@@ -68,6 +75,7 @@ class Game:
         monster.lp -= player.atk
         if monster.lp < 0 : 
             monster.alive = False 
+            player.atk += 5
         else : # Attaque retour 
             player.lp -= monster.atk
             if player.lp <=0 :

@@ -34,7 +34,7 @@ def on_move_msg(json, methods=["GET", "POST"]):
 
         data, ret = game.move(dx,dy,play)
 
-        DATA = [data,play.lp, play.atk,play.alive,p]
+        DATA = [data,play.lp, play.atk,play.alive,p,game.player2.atk,game.player2.lp,game._player.atk,game._player.lp]
     
         socketio.emit("response", DATA)
 

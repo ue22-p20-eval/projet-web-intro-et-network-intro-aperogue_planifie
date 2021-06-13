@@ -46,9 +46,15 @@ class Player:
             data = [{"i": f"{self._y}", "j":f"{self._x}", "content":"x"}, {"i": f"{new_y}", "j":f"{new_x}", "content":self._symbol}]
             self._x = new_x
             self._y = new_y
-        elif map[new_y][new_x ] == "M":
+        elif map[new_y][new_x ] == "M" :
             ret = True
             data = ['Fight required']
+        elif map[new_y][new_x ] == "G":
+            ret = True
+            data = ['Fight P1P2']
+        elif map[new_y][new_x ] == "@":
+            ret = True
+            data = ['Fight P2P1']
         elif map[new_y][new_x] == "T":
             ret = True
             data = ['Treasure found']
