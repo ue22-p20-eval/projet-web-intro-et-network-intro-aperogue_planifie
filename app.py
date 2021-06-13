@@ -14,15 +14,29 @@ def index():
 
 @socketio.on("move")
 def on_move_msg(json, methods=["GET", "POST"]):
-    print("received move ws message")
-    dx = json['dx']
-    dy = json["dy"]
+    #Si on a demandé un nouveau joueur :
+    if json['dx'] == 10:
+        print("New player")
+        x,y = game.newP()
+        DATA = [[{'i':-100}],[{'x':f"{x}",'y':f"{y}"}]]
+        socketio.emit("response", DATA)
+    #Si on a demandé de bouger :
+    else :
+        print("received move ws message")
+        dx = json['dx']
+        dy = json["dy"]
+        p = json['p']
+        
+        if p == 0: 
+            play = game._player
+        else :
+            play = game.player2
 
-    data, ret = game.move(dx,dy)
+        data, ret = game.move(dx,dy,play)
 
-    DATA = [data,game._player.lp, game._player.atk,game._player.alive]
+        DATA = [data,play.lp, play.atk,play.alive,p]
     
-    socketio.emit("response", DATA)
+        socketio.emit("response", DATA)
 
 if __name__=="__main__":
     socketio.run(app, port=5001, debug=True)

@@ -12,18 +12,26 @@ class Player:
         n_row = len(_map)
         #n_col = len(_map[0])
 
-        y_init = n_row//2
+        y_initp = np.random.randint(-1,n_row-2)
         found = False
         while found is False:
-            y_init += 1
-            for i,c in enumerate(_map[y_init]):
+            y_initp += 1
+            if y_initp > n_row -1 :
+                y_initp =0
+            listP = []
+            for i,c in enumerate(_map[y_initp]):
                 if c == ".":
-                    x_init = i
-                    found = True
-                    break
+                    listP.append(i)
 
-        self._x = x_init
-        self._y = y_init
+            if len(listP)>0 :
+                table = np.array(listP)
+                found = True
+                np.random.shuffle(table)
+                x_initp = table[0]
+            
+
+        self._x = x_initp
+        self._y = y_initp
 
         _map[self._y][self._x] = self._symbol
 
@@ -48,6 +56,8 @@ class Player:
             ret = False
             data = []
         return data, ret
+    def getpos(self):
+        return(self._x,self._y)
     
 
 
@@ -64,20 +74,25 @@ class Monster:
         n_row = len(_map)
         #n_col = len(_map[0])
 
-        y_init = np.random.randint(n_row)
+        y_initm = np.random.randint(-1,n_row-2)
         found = False
         while found is False:
-            for i,c in enumerate(_map[y_init]):
+            y_initm += 1
+            if y_initm > n_row -1 :
+                y_initm =0
+            listM = []
+            for i,c in enumerate(_map[y_initm]):
                 if c == ".":
-                    x_init = i
-                    found = True
-                    break
-            y_init += 1
+                    listM.append(i)
 
-            if y_init > n_row-1 :
-                y_init = 0
+            if len(listM)>0 :
+                table = np.array(listM)
+                found = True
+                np.random.shuffle(table)
+                x_initm = table[0]
+            
 
-        self._x = x_init
-        self._y = y_init
+        self._x = x_initm
+        self._y = y_initm
 
-        _map[self._y][self._x] = self._symbol 
+        _map[self._y][self._x] = self._symbol

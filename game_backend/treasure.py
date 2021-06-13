@@ -13,20 +13,25 @@ class Treasure:
         n_row = len(_map)
         #n_col = len(_map[0])
 
-        y_init = np.random.randint(n_row)
+        y_initt = np.random.randint(-1,n_row-2)
         found = False
         while found is False:
-            for i,c in enumerate(_map[y_init]):
+            y_initt += 1
+            if y_initt > n_row -1 :
+                y_initt =0
+            listT = []
+            for i,c in enumerate(_map[y_initt]):
                 if c == ".":
-                    x_init = i
-                    found = True
-                    break
-            y_init += 1
+                    listT.append(i)
 
-            if y_init > n_row-1 :
-                y_init = 0
+            if len(listT)>0 :
+                table = np.array(listT)
+                found = True
+                np.random.shuffle(table)
+                x_initt = table[0]
+            
 
-        self._x = x_init
-        self._y = y_init
+        self._x = x_initt
+        self._y = y_initt
 
         _map[self._y][self._x] = self._symbol

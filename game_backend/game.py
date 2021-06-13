@@ -11,8 +11,9 @@ class Game:
         self._map = self._generator.tiles_level
 
         self._player = Player()
+        self.player2 = Player(symbol='G')
         self._player.initPos( self._map )
-        self.M_list = [Monster() for _ in range(np.random.randint(2,5))]
+        self.M_list = [Monster() for _ in range(np.random.randint(2,6))]
         self.T_list = [Treasure(status='revealed') for _ in range(np.random.randint(3,6)) ]
         
         for monst in self.M_list :
@@ -28,32 +29,37 @@ class Game:
     def getMap(self):
         return self._map
 
-    def move(self, dx, dy):
-        temp1,temp2 = self._player.move(dx, dy, self._map)
+    def newP(self):
+        self.player2.initPos(self._map)
+        x,y = self.player2.getpos()
+        return(x,y)
+
+    def move(self, dx, dy,player):
+        temp1,temp2 = player.move(dx, dy, self._map)
         if len(temp1) >0 and temp1[0] == 'Fight required' :
             ## On recherche sur quel monstre on est tombé :
             i=0
-            while not (self.M_list[i]._x == self._player._x + dx and self.M_list[i]._y == self._player._y + dy):
+            while not (self.M_list[i]._x == player._x + dx and self.M_list[i]._y == player._y + dy):
                 i=i+1
 
-            Game.attack(self,self._player,self.M_list[i])
+            Game.attack(self,player,self.M_list[i])
             if self.M_list[i].alive == False :
-                self._map[self._player._y + dy][self._player._x + dx] = '.'
-                return(self._player.move(dx, dy, self._map))
+                self._map[player._y + dy][player._x + dx] = '.'
+                return(player.move(dx, dy, self._map))
             else : 
                 return([],True)
 
         elif len(temp1) >0 and temp1[0] == 'Treasure found' :
             ## On recherche sur quel trésor on est tombé :
             i=0
-            while not (self.T_list[i]._x == self._player._x + dx and self.T_list[i]._y == self._player._y + dy):
+            while not (self.T_list[i]._x == player._x + dx and self.T_list[i]._y == player._y + dy):
                 i=i+1
             if self.T_list[i].effect == 'Heal':
-                self._player.lp += int(self.T_list[i].nb)
+                player.lp += int(self.T_list[i].nb)
             else :
-                self._player.atk += int(self.T_list[i].nb)
-            self._map[self._player._y + dy][self._player._x + dx] = '.'
-            return(self._player.move(dx, dy, self._map))
+                player.atk += int(self.T_list[i].nb)
+            self._map[player._y + dy][player._x + dx] = '.'
+            return(player.move(dx, dy, self._map))
 
         else : 
             return (temp1,temp2)
@@ -64,5 +70,5 @@ class Game:
             monster.alive = False 
         else : # Attaque retour 
             player.lp -= monster.atk
-            if player.lp <0 :
+            if player.lp <=0 :
                 player.alive = False

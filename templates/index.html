@@ -6,39 +6,94 @@
     </head>
     <body onload="startMap()">
         <div> <b> Rogue Flask </b></div>
-        <table>
+        <table style="float:left">
+            <thead>
+                <tr>
+                    <th id='tab1' colspan="2">   Player 1</th>
+                    
+                    
+                </tr>
+            </thead>
             <tbody>
                 <tr>
-                    <td>Attaque : = </td>
-                    <td id = "atk">{{ atk }}</td> 
+                    <td>Attack : </td>
+                    <td id = "atk">{{ atk }}</td>
+                    
                 </tr>
                 <tr>
-                    <td>LP = </td>
+                    <td>Life Points : </td>
                     <td id = "lp">{{ lp }}</td> 
+                </tr>
+                <tr>
+                    <td>
+                    <div id = 'fleche' class="flexbox"> 
+                        <div class="thekeypad">
+                            <div class="key"></div>
+                            <div class="key"><input id="go_n" class="keypad_btn" type="button" value="&#9650"> </div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_w" class="keypad_btn" type="button" value="&#9664"></div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_e" class="keypad_btn" type="button" value="&#9654"></div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_s" class="keypad_btn" type="button" value="&#9660"></div>
+                            <div class="key"></div>
+                        </div>
+                        </td>
+                        
                 </tr>
             </tbody>
         </table>
-        <div class="flexbox">
-            <div class="thekeypad">
-                <div class="key"></div>
-                <div class="key"><input id="go_n" class="keypad_btn" type="button" value="&#9650"> </div>
-                <div class="key"></div>
-                <div class="key"><input id="go_w" class="keypad_btn" type="button" value="&#9664"></div>
-                <div class="key"></div>
-                <div class="key"><input id="go_e" class="keypad_btn" type="button" value="&#9654"></div>
-                <div class="key"></div>
-                <div class="key"><input id="go_s" class="keypad_btn" type="button" value="&#9660"></div>
-                <div class="key"></div>
-            </div>
 
-            
-            <audio controls >
-                <source src={{ url_for("static", filename="musique.mp3") }} type="audio/mpeg">
-                <p>Votre navigateur ne prend pas en charge l'audio HTML.</p>
-              </audio>
-            
-        </div>
-        
+        <table style="float:right">
+            <thead>
+                <th id='tab2' colspan="2">   Player 2 : <br> Not spawned yet</th>
+                </thead>
+            <tr>
+                <td>Attack :</td>
+                <td id ='atk2'>{{ atk2 }}</td> 
+
+            </tr>
+            <tr><td>Life points :</td>
+                <td id ='lp2'>{{ lp2 }}</td>
+                 </tr> 
+            <tr>
+                <td>
+                    <div id = 'fleche' class="flexbox"> 
+                        <div class="thekeypad">
+                            <div class="key"></div>
+                            <div class="key"><input id="go_nb" class="keypad_btn" type="button" value="&#9650"> </div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_wb" class="keypad_btn" type="button" value="&#9664"></div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_eb" class="keypad_btn" type="button" value="&#9654"></div>
+                            <div class="key"></div>
+                            <div class="key"><input id="go_sb" class="keypad_btn" type="button" value="&#9660"></div>
+                            <div class="key"></div>
+                        </div>    
+                    </td>
+            </tr>
+        </table>
+
+        <table style="float:center;">
+            <tbody>
+                <tr>
+                    <td>
+                        <div id='New Player'>
+                            <input class="newplayer" type="button" value="New Player"> </div>
+                    </td>
+                    <td>
+                        <audio controls loop='true' >
+                            <source src={{ url_for("static", filename="musique.mp3") }} type="audio/mpeg">
+                            <p>Votre navigateur ne prend pas en charge l'audio HTML.</p>
+                          </audio>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div id="game_over">            
+    </div>
 
     <script>
         var res = 16;
@@ -52,10 +107,10 @@
         
         var map_width = parseInt(n_col);
         
-        var myGameArea = { /* Initializing canvas */
+        var myGameArea = { /* Fenetre de jeu */
             canvas : document.createElement("canvas"),
             start : function() {
-                this.canvas.style.left = "100px";
+                this.canvas.style.left = "150px";
                 this.canvas.style.top = "200px";
                 this.canvas.style.position = "absolute"
                 this.canvas.width = res*map_width;
@@ -65,7 +120,7 @@
             }
         }
 
-        function startMap(){ /*  */
+        function startMap(){
             myGameArea.start();
             for(var i = 0; i < map_height; i++){
                 for(var j = 0; j < map_width; j++){
@@ -92,6 +147,9 @@
 
         var player = new Image();
         player.src = '../static/pic/player.png'
+
+        var player2 = new Image();
+        player2.src = '../static/pic/player.png'
         
         var Table_eq = new Map();
         Table_eq.set(".",floor);
@@ -100,6 +158,7 @@
         Table_eq.set("@",player);
         Table_eq.set("x",floor2);
         Table_eq.set("M",monster);
+        Table_eq.set("G",player2);
 
     </script>
             
