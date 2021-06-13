@@ -55,7 +55,7 @@ class Player:
         elif map[new_y][new_x ] == "@":
             ret = True
             data = ['Fight P2P1']
-        elif map[new_y][new_x] == "T":
+        elif map[new_y][new_x] == "T" or map[new_y][new_x] == "P":
             ret = True
             data = ['Treasure found']
         else:

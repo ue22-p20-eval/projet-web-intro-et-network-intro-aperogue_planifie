@@ -13,8 +13,8 @@ class Game:
         self._player = Player()
         self.player2 = Player(symbol='G')
         self._player.initPos( self._map )
-        self.M_list = [Monster() for _ in range(np.random.randint(2,6))]
-        self.T_list = [Treasure(status='revealed') for _ in range(np.random.randint(3,6)) ]
+        self.M_list = [Monster() for _ in range(np.random.randint(4,7))]
+        self.T_list = [Treasure(status='revealed') for _ in range(np.random.randint(5,9)) ]
         
         for monst in self.M_list :
             monst.initPos( self._map )
@@ -23,8 +23,9 @@ class Game:
         
         
         self.T_list[0].effect = 'Heal'#  Le premier cadeau donne toujours de la vie, sinon atk
-        self.T_list[-1].status = 'Hide'
-        self.T_list[-2].status = 'Hide' 
+
+        self.T_list[-1]._symbol = 'P' # On cache les deux derniers objets
+        self.T_list[-2]._symbol = 'P'
 
     def getMap(self):
         return self._map
