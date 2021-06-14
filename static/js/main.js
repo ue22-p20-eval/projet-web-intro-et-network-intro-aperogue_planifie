@@ -158,10 +158,10 @@ window.addEventListener("DOMContentLoaded", (event) => {
         }
         
         
-        
-        if( DATA[3] == false ) /* Si le joueur est mort*/
+        console.log(DATA[10])
+        if( DATA[10] == false ) /* Si le joueur 1 est mort*/
         {
-
+            console.log("TEST")
             var jeu = document.getElementsByTagName("canvas");
             for(var o=0;o < jeu.length;o++){
                 jeu[o].style.display = 'none';
@@ -171,14 +171,23 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
             var game_over = document.getElementById("game_over");
             game_over.style.display = "flex";
-            if (DATA[4] ==0) {
-                game_over.textContent = "Game Over for player 1"
-            } else {
-                game_over.textContent = "Game over for player 2"
-            }
+            
+            game_over.textContent = "Game Over for player 1"
+            
+            
+        } else if (DATA[9] == false) {
+            console.log("TEST2")
+            var jeu = document.getElementsByTagName("canvas");
+            for(var o=0;o < jeu.length;o++){
+                jeu[o].style.display = 'none';
+            } 
+            var fleche = document.getElementById("fleche")
+            fleche.style.display = "none";
 
+            var game_over = document.getElementById("game_over");
+            game_over.style.display = "flex";
             
-            
+            game_over.textContent = "Game Over for player 2"
         }
     });
 
